@@ -128,20 +128,20 @@ def main():
     num = st.session_state["page_num"]
 
     # 显示页面内容
-    play_video(file_list[num].rstrip()) 
+    play_video(file_list[num-1].rstrip()) 
     QA(data_face, data_lip, num)
 
     # 显示上一页和下一页按钮
-    # 第2页到31页
-    if num > 1 and num < max_num:
+    # 第2页到224页
+    if num > 1 and num < 224:
         col1, col2 = st.columns(2)
         if col2.button("Previous"):
             switch_page(st.session_state["page_num"] - 1)
         if col1.button("Next"):
             switch_page(st.session_state["page_num"] + 1)
 
-    # 第32页
-    if st.session_state["page_num"] == max_num:
+    # 第224页
+    if st.session_state["page_num"] == 224:
         col1, col2 = st.columns(2)
         if "button_clicked" not in st.session_state:
             st.session_state.button_clicked = False
