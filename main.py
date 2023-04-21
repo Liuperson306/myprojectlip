@@ -37,7 +37,7 @@ def get_ans(answer_str):
 # 播放Video文件下的视频
 def play_video(file_name):
     st.subheader(fr"Video")
-    st.video(fr'merge_video1/{file_name}',start_time=0)
+    st.video(fr'merge_video2/{file_name}',start_time=0)
     st.write("Please answer the following questions, after you watch the video. ")
 
 
