@@ -59,7 +59,7 @@ def data_collection(data_face, data_lip):
     string = "face:" + data1 + "\n" + "lip:" + data2
     localtime = time.strftime('%Y-%m-%d %H-%M-%S', time.localtime())
     # 打开文件并指定写模式
-    file_name = "data113-224 " + localtime + ".txt"
+    file_name = "dataV_FaceFormer " + localtime + ".txt"
     file = open(file_name, "w")
     # 将字符串写入文件
     file.write(string)
@@ -73,7 +73,7 @@ def data_collection(data_face, data_lip):
     msg = MIMEMultipart()
     msg['From'] = sender_email
     msg['To'] = 'm15507509432@163.com'  # 收件人邮箱
-    msg['Subject'] = 'data113-224 ' + localtime
+    msg['Subject'] = 'dataV_FaceFormer ' + localtime
 
     # 邮件正文
     text = MIMEText('')
@@ -117,8 +117,8 @@ def main():
 
     if "data_face" and "data_lip" not in st.session_state:
         # 初始化data变量
-        data_face = [1 for x in range(0, 112)]
-        data_lip = [1 for x in range(0, 112)]
+        data_face = [1 for x in range(0, 96)]
+        data_lip = [1 for x in range(0, 96)]
     else:
         # 恢复data变量的状态
         data_face = st.session_state["data_face"]
@@ -131,16 +131,16 @@ def main():
     QA(data_face, data_lip, num)
 
     # 显示上一页和下一页按钮
-    # 第2页到112页
-    if num > 1 and num < 112:
+    # 第2页到96页
+    if num > 1 and num < 96:
         col1, col2 = st.columns(2)
         if col2.button("Previous"):
             switch_page(st.session_state["page_num"] - 1)
         if col1.button("Next"):
             switch_page(st.session_state["page_num"] + 1)
 
-    # 第112页
-    if st.session_state["page_num"] == 112:
+    # 第96页
+    if st.session_state["page_num"] == 96:
         col1, col2 = st.columns(2)
         if "button_clicked" not in st.session_state:
             st.session_state.button_clicked = False
