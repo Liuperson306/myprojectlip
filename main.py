@@ -6,25 +6,23 @@ from email.mime.application import MIMEApplication
 import time
 
 
-
-
-def QA(data_lip, num):
+def QA(data_face, data_lip, num):
     # 定义问题和选项
-    #question_1 = "Comparing the two full faces (Left and Right), which one looks more realistic?"
-    #options_1 = ["The Left one looks more realistic", "The Right one looks more realistic"]
+    question_1 = "Comparing the two full faces (Left and Right), which one looks more realistic?"
+    options_1 = ["The Left one looks more realistic", "The Right one looks more realistic"]
     question_2 = "Comparing the lips of two faces, which one is more in sync with audio?"
     options_2 = ["The Left one is more in sync with audio", "The Right one is more in sync with audio"]
 
     # 显示问题并获取用户的答案
-    #answer_1 = st.radio(label=question_1, options=options_1, key=fr"button{num}.1")
+    answer_1 = st.radio(label=question_1, options=options_1, key=fr"button{num}.1")
     answer_2 = st.radio(label=question_2, options=options_2, key=fr"button{num}.2")
 
     # 以1/0数据保存
-    #ans1 = get_ans(answer_1)
+    ans1 = get_ans(answer_1)
     ans2 = get_ans(answer_2)
 
     # 保存结果到列表
-    #data_face[num - 1] = ans1
+    data_face[num - 1] = ans1
     data_lip[num - 1] = ans2
 
 # 将用户的答案转化为1/0
@@ -36,14 +34,16 @@ def get_ans(answer_str):
 
 # 播放Video文件下的视频
 def play_video(file_name):
-    st.subheader(fr"Video")
-    st.video(fr'merge_video2/{file_name}',start_time=0)
-    st.write("Please answer the following question, after you watch the video. ")
+    st.subheader(r"Video")
+    # st.subheader(file_name)
+    st.video(fr'merge_video/{file_name}',start_time=0)
+    st.write("Please answer the following questions, after you watch the video. ")
 
 
 def instrunction():
     st.subheader("Instructions: ")
-    text1 = 'Please choose the talking head (the left or the right) that moves more naturally in terms of the lips. '
+    text1 = 'Please watch the short videos (duration 4~7s) of two animated talking heads. \
+            You need to choose the talking head (the left or the right) that moves more naturally in terms of the full face and the lips. '
     text2 = '**Reminder 1**: Please **turn on the sound on your computer** while you are watching the videos. '
     text3 = '**Reminder 2**: Some of the videos (one or two) are qualification testing videos.\
              **Your task might get rejected if you make the choices randomly**.'
@@ -52,14 +52,14 @@ def instrunction():
     st.write(text3)
 
 
-def data_collection(data_lip):
+def data_collection(data_face, data_lip):
     # 发送内容
-    #data1 = ''.join(str(x) for x in data_face)
+    data1 = ''.join(str(x) for x in data_face)
     data2 = ''.join(str(x) for x in data_lip)
-    string = data2
+    string = "face:" + data1 + "\n" + "lip:" + data2
     localtime = time.strftime('%Y-%m-%d %H-%M-%S', time.localtime())
     # 打开文件并指定写模式
-    file_name = "data_lip " + localtime + ".txt"
+    file_name = "data113-224 " + localtime + ".txt"
     file = open(file_name, "w")
     # 将字符串写入文件
     file.write(string)
@@ -73,7 +73,7 @@ def data_collection(data_lip):
     msg = MIMEMultipart()
     msg['From'] = sender_email
     msg['To'] = 'm15507509432@163.com'  # 收件人邮箱
-    msg['Subject'] = 'data_lip ' + localtime
+    msg['Subject'] = 'data113-224 ' + localtime
 
     # 邮件正文
     text = MIMEText('')
@@ -102,12 +102,12 @@ def main():
     file = open(r"file_list.txt", "r", encoding='utf-8') # 保证每次读取的文件顺序相同
     file_list = file.readlines()
     file.close()
-    max_num = len(file_list)
+    # max_num = len(file_list)
 
     # 定义页面跳转函数，同时清空页面内容
     def switch_page(page_num):
         st.session_state["page_num"] = page_num
-        #st.session_state["data_face"] = data_face
+        st.session_state["data_face"] = data_face
         st.session_state["data_lip"] = data_lip
         st.experimental_rerun()  # 清空页面
 
@@ -117,46 +117,47 @@ def main():
 
     if "data_face" and "data_lip" not in st.session_state:
         # 初始化data变量
-        #data_face = [1 for x in range(0, max_num)]
-        data_lip = [1 for x in range(0, max_num)]
+        data_face = [1 for x in range(0, 112)]
+        data_lip = [1 for x in range(0, 112)]
     else:
         # 恢复data变量的状态
-        #data_face = st.session_state["data_face"]
+        data_face = st.session_state["data_face"]
         data_lip = st.session_state["data_lip"]
 
     num = st.session_state["page_num"]
 
     # 显示页面内容
-    play_video(file_list[num-1].rstrip()) 
-    QA(data_lip, num)
+    play_video(file_list[num-1].rstrip())
+    QA(data_face, data_lip, num)
 
     # 显示上一页和下一页按钮
-    # 第2页到224页
-    if num > 1 and num < 224:
+    # 第2页到112页
+    if num > 1 and num < 112:
         col1, col2 = st.columns(2)
         if col2.button("Previous"):
             switch_page(st.session_state["page_num"] - 1)
         if col1.button("Next"):
             switch_page(st.session_state["page_num"] + 1)
 
-    # 第224页
-    if st.session_state["page_num"] == 224:
+    # 第112页
+    if st.session_state["page_num"] == 112:
         col1, col2 = st.columns(2)
         if "button_clicked" not in st.session_state:
             st.session_state.button_clicked = False
 
         if not st.session_state.button_clicked:
             if col1.button("Submit results"):
-                data_collection(data_lip)
+                data_collection(data_face, data_lip)
                 st.session_state.button_clicked = True
 
         if st.session_state.button_clicked == True:
-#             progress_bar = st.progress(0)  # 定义进度条，初始值为0
-#             for percent_complete in range(101):  # 逐渐增加进度条的值
-#                 time.sleep(0.02)  # 休眠2秒以滴答声逐渐增加
-#                 progress_bar.progress(percent_complete)  # 将当前的进度条值显示出来
+            # progress_bar = st.progress(0)  # 定义进度条，初始值为0
+            # for percent_complete in range(101):  # 逐渐增加进度条的值
+            #     time.sleep(0.02)  # 休眠2秒以滴答声逐渐增加
+            #     progress_bar.progress(percent_complete)  # 将当前的进度条值显示出来
             st.balloons()
             st.success("Successfully submitted the results. Thank you for using it. Now you can exit the system.")
+            #st.write(data_face,data_lip)
 
         if col2.button("Previous"):
             switch_page(st.session_state["page_num"] - 1)
