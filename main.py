@@ -38,13 +38,12 @@ def get_ans(answer_str):
 def play_video(file_name):
     st.subheader(fr"Video")
     st.video(fr'merge_video2/{file_name}',start_time=0)
-    st.write("Please answer the following questions, after you watch the video. ")
+    st.write("Please answer the following question, after you watch the video. ")
 
 
 def instrunction():
     st.subheader("Instructions: ")
-    text1 = 'Please watch the four short videos (duration 4~7s) of two animated talking heads. \
-            You need to choose the talking head (the left or the right) that moves more naturally in terms of the full face and the lips. '
+    text1 = 'Please choose the talking head (the left or the right) that moves more naturally in terms of the lips. '
     text2 = '**Reminder 1**: Please **turn on the sound on your computer** while you are watching the videos. '
     text3 = '**Reminder 2**: Some of the videos (one or two) are qualification testing videos.\
              **Your task might get rejected if you make the choices randomly**.'
