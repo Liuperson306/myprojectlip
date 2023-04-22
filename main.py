@@ -53,7 +53,7 @@ def instrunction():
     st.write(text3)
 
 
-def data_collection(data_face, data_lip):
+def data_collection(data_lip):
     # 发送内容
     #data1 = ''.join(str(x) for x in data_face)
     data2 = ''.join(str(x) for x in data_lip)
@@ -148,7 +148,7 @@ def main():
 
         if not st.session_state.button_clicked:
             if col1.button("Submit results"):
-                data_collection(data_face, data_lip)
+                data_collection(data_lip)
                 st.session_state.button_clicked = True
 
         if st.session_state.button_clicked == True:
