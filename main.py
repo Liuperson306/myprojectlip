@@ -33,8 +33,8 @@ def get_ans(answer_str):
         return "0"
 
 # 播放Video文件下的视频
-def play_video(file_name):
-    st.subheader(r"Video")
+def play_video(file_name,num):
+    st.subheader(fr"Video{num}/96")
     # st.subheader(file_name)
     st.video(fr'merge_video2/{file_name}',start_time=0)
     st.write("Please answer the following questions, after you watch the video. ")
@@ -127,7 +127,7 @@ def main():
     num = st.session_state["page_num"]
 
     # 显示页面内容
-    play_video(file_list[num-1].rstrip())
+    play_video(file_list[num-1].rstrip(),num)
     QA(data_face, data_lip, num)
 
     # 显示上一页和下一页按钮
